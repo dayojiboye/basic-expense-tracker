@@ -27,6 +27,7 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
+        useSafeArea: true,
         isScrollControlled: true,
         context: context,
         builder: (ctx) => NewExpense(
@@ -61,6 +62,8 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     List<Widget> mainContent = [
       Column(
         children: [
@@ -83,7 +86,9 @@ class _ExpensesState extends State<Expenses> {
 
     if (_registeredExpenses.isNotEmpty) {
       mainContent = [
-        Chart(expenses: _registeredExpenses),
+        width > 600
+            ? Expanded(child: Chart(expenses: _registeredExpenses))
+            : Chart(expenses: _registeredExpenses),
         Expanded(
             child: ExpensesList(
           expenses: _registeredExpenses,
@@ -94,12 +99,9 @@ class _ExpensesState extends State<Expenses> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: const [
-            Text(
-              "Flutter Expense Tracker",
-            )
-          ],
+        // centerTitle: false,
+        title: const Text(
+          "Flutter Expense Tracker",
         ),
         actions: [
           IconButton(
@@ -109,10 +111,15 @@ class _ExpensesState extends State<Expenses> {
       // ignore: avoid_unnecessary_containers
       body: Container(
         child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: mainContent,
-          ),
+          child: width < 600
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: mainContent,
+                )
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: mainContent,
+                ),
         ),
       ),
     );
