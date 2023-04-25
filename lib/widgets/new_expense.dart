@@ -38,9 +38,9 @@ class _NewExpenseState extends State<NewExpense> {
 
   void _submitExpenseData() {
     final enteredAmount = double.tryParse(_amountController.text);
-    final amountIsValid = enteredAmount == null || enteredAmount <= 0;
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
     if (_titleController.text.trim().isEmpty ||
-        amountIsValid ||
+        amountIsInvalid ||
         _selectedDate == null) {
       showDialog(
           context: context,
